@@ -5,7 +5,7 @@ An easy ORM tool for Golang, support MyBatis-Like XML template SQL
 ## Overview
 
 * Full-Featured ORM (almost)
-* MyBtis-Like template SQL
+* MyBatis-Like XML template SQL
 * Developer Friendly
 
 ## Getting Started
