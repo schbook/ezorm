@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper namespace="main">
+    <update id="createTestDB">
+        CREATE DATABASE IF NOT EXISTS ezorm_test;
+    </update>
+
+    <update id="createTestTable">
+        CREATE TABLE IF NOT EXISTS `ezorm_test`.`test_table` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `name` varchar(32) NOT NULL DEFAULT '',
+            PRIMARY KEY (`id`)
+        );
+    </update>
+
+    <insert id="insertTest">
+        INSERT INTO `ezorm_test`.`test_table`(`name`)
+        VALUES(#{Name});
+    </insert>
+
+    <select id="queryRowsTest">
+        SELECT * FROM `ezorm_test`.`test_table`;
+    </select>
+
+    <select id="queryRowTest">
+        SELECT * FROM `ezorm_test`.`test_table`
+        WHERE `id`=#{Id}
+        LIMIT 1;
+    </select>
+
+    <select id="complexQueryRowTest">
+        SELECT * FROM `ezorm_test`.`test_table`
+        WHERE 1=1
+        {{if .Name}}AND `name`=#{Name}{{end}}
+        {{if .Id}}OR `id`={{.Id}}{{end}}
+    </select>
+</mapper>
