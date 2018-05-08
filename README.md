@@ -97,4 +97,4 @@ func main(){
 
 © Schbook, 2018~time.Now
 
-Released under the [MIT License](https://github.com/schbook/ezorm/master/License)
+Released under the [MIT License](https://github.com/schbook/ezorm/blob/master/License)
