@@ -13,7 +13,7 @@ var(
 )
 
 func Register(dbName,driverName,dataSourceName,mapperPath string)error{
-	f,err := newSqlFactory(driverName,dataSourceName,mapperPath)
+	f,err := newSqlFactory(dbName, driverName,dataSourceName,mapperPath)
 
 	if err!=nil{
 		return err

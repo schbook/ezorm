@@ -8,6 +8,7 @@ import (
 	"errors"
 	"reflect"
 	"database/sql"
+	"fmt"
 )
 
 /**
@@ -22,6 +23,7 @@ type sqlFactoryImpl struct {
 	tplRepositories map[string]sqlRepository
 	dataSourceName string
 	driverName string
+	dbName string
 }
 
 type mapperXML struct{
@@ -35,8 +37,9 @@ type templateElem struct{
 	Sql string `xml:",chardata"`
 }
 
-func(fac *sqlFactoryImpl) build(driverName,dataSourceName,mapperPath string) error{
+func(fac *sqlFactoryImpl) build(dbName,driverName,dataSourceName,mapperPath string) error{
 	fac.tplRepositories = make(map[string]sqlRepository)
+	fac.dbName = dbName
 	fac.dataSourceName = dataSourceName
 	fac.driverName = driverName
 
@@ -98,6 +101,10 @@ func(fac *sqlFactoryImpl) parseMapperFile(driverName,mapperFilePath string)error
 }
 
 func(fac *sqlFactoryImpl) QueryRows(namespace,id string,param interface{},rows interface{})error{
+	if fac.tplRepositories == nil{
+		return fmt.Errorf("SQL FACTORY %v NOT FOUND",fac.dbName)
+	}
+
 	rep,exist := fac.tplRepositories[namespace]
 
 	if !exist{
@@ -162,6 +169,10 @@ func(fac *sqlFactoryImpl) QueryRows(namespace,id string,param interface{},rows i
 }
 
 func(fac *sqlFactoryImpl) QueryRow(namespace,id string,param interface{},row interface{})error{
+	if fac.tplRepositories == nil{
+		return fmt.Errorf("SQL FACTORY %v NOT FOUND",fac.dbName)
+	}
+
 	rep,exist := fac.tplRepositories[namespace]
 
 	if !exist{
@@ -221,6 +232,10 @@ func(fac *sqlFactoryImpl) QueryRow(namespace,id string,param interface{},row int
 }
 
 func(fac *sqlFactoryImpl)Query(param interface{}) error{
+	if fac.tplRepositories == nil{
+		return fmt.Errorf("SQL FACTORY %v NOT FOUND",fac.dbName)
+	}
+
 	paramPtr := reflect.ValueOf(param)
 
 	if paramPtr.Kind()!=reflect.Ptr{
@@ -266,6 +281,11 @@ func(fac *sqlFactoryImpl) Insert(namespace string, id string, param interface{})
 }
 
 func(fac *sqlFactoryImpl) Execute(sqlType, namespace string, id string, param interface{})(cnt int64,err error){
+	if fac.tplRepositories == nil{
+		err = fmt.Errorf("SQL FACTORY %v NOT FOUND",fac.dbName)
+		return
+	}
+
 	rep,exist := fac.tplRepositories[namespace]
 
 	if !exist{
@@ -304,5 +324,9 @@ func(fac *sqlFactoryImpl) Execute(sqlType, namespace string, id string, param in
 }
 
 func(fac *sqlFactoryImpl)GetDB()(db *sql.DB, err error){
+	if fac.driverName==""||fac.dataSourceName==""{
+		return nil,fmt.Errorf("SQL FACTORY %v NOT FOUND",fac.dbName)
+	}
+
 	return sql.Open(fac.driverName, fac.dataSourceName)
 }

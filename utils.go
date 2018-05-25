@@ -254,7 +254,12 @@ func (a argInt) Get(i int, args ...int) (r int) {
 	return
 }
 
+// set field value depend on field type
 func setFieldValue(ind reflect.Value, value interface{}) {
+	if ind.CanSet()==false{
+		panic("ind is not settable")
+	}
+
 	//fmt.Println(ind.Kind())
 	switch ind.Kind() {
 	case reflect.Bool:
@@ -350,9 +355,14 @@ func setFieldValue(ind reflect.Value, value interface{}) {
 				}
 			}
 		}
+	case reflect.Slice:
+		ind.Set(reflect.ValueOf(value))
+	case reflect.Interface:
+		ind.Set(reflect.ValueOf(value))
 	}
 }
 
+// fill the row struct with scanned values
 func setRowVal(rowType reflect.Type,item reflect.Value,colsMap map[string]interface{},scanList []interface{}){
 	if rowType.Kind()==reflect.Struct{
 		for i:=0;i<rowType.NumField();i++{
@@ -360,6 +370,7 @@ func setRowVal(rowType reflect.Type,item reflect.Value,colsMap map[string]interf
 			val,exist := colsMap[snakeString(rowType.Field(i).Name)]
 
 			if exist{
+				//access unexported field
 				f = reflect.NewAt(f.Type(), unsafe.Pointer(f.UnsafeAddr())).Elem()
 				setFieldValue(f,reflect.ValueOf(val).Elem().Interface())
 			}
@@ -369,6 +380,7 @@ func setRowVal(rowType reflect.Type,item reflect.Value,colsMap map[string]interf
 	}
 }
 
+// get the table's column information
 func getColsInfo(rs *sql.Rows)(colsMap map[string]interface{},scanList []interface{},err error){
 	cols,err := rs.Columns()
 	if err!=nil{

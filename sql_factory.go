@@ -20,9 +20,9 @@ type SqlFactory interface {
 	GetDB()(db *sql.DB, err error)
 }
 
-func newSqlFactory(driverName,dataSourceName,mapperPath string) (SqlFactory,error){
+func newSqlFactory(dbName,driverName,dataSourceName,mapperPath string) (SqlFactory,error){
 	f := sqlFactoryImpl{}
-	err := f.build(driverName,dataSourceName,mapperPath)
+	err := f.build(dbName,driverName,dataSourceName,mapperPath)
 
 	if err!=nil{
 		return nil,err
