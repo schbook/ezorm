@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
-	"strings"
 	"text/template"
+	"bytes"
 )
 
 /**
@@ -25,14 +25,14 @@ type sqlTemplateImpl struct {
 }
 
 func (s *sqlTemplateImpl) prepare(sqlType string,param interface{}) (sql string, args []interface{}, err error) {
-	sb := strings.Builder{}
-	err = s.tpl.Execute(&sb, param)
+	bf := bytes.Buffer{}
+	err = s.tpl.Execute(&bf, param)
 
 	if err != nil {
 		return
 	}
 
-	rawSqlText := sb.String()
+	rawSqlText := string(bf.Bytes())
 
 	if param==nil{
 		sql = rawSqlText
