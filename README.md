@@ -1,6 +1,7 @@
 # EZORM
 
 [![Build Status](https://travis-ci.org/schbook/ezorm.svg?branch=master)](https://travis-ci.org/schbook/ezorm)
+[![Code Coverage](https://codecov.io/gh/schbook/ezorm/branch/master/graph/badge.svg)](https://codecov.io/gh/schbook/ezorm)
 [![GoDoc](https://godoc.org/github.com/schbook/ezorm?status.svg)](https://godoc.org/github.com/schbook/ezorm)
 
 ## Introduction
