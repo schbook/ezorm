@@ -1,8 +1,13 @@
 # EZORM
 
+[![Build Status](https://travis-ci.org/schbook/ezorm.svg?branch=master)](https://travis-ci.org/schbook/ezorm)
+[![GoDoc](https://godoc.org/github.com/schbook/ezorm?status.svg)](https://godoc.org/github.com/schbook/ezorm)
+
+## Introduction
+
 An easy ORM tool for Golang, support MyBatis-Like XML template SQL
 
-## Overview
+## Features
 
 * Full-Featured ORM (almost)
 * MyBatis-Like XML template SQL
