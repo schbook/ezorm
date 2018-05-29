@@ -33,7 +33,7 @@ type mapperXML struct{
 
 type templateElem struct{
 	XMLName xml.Name
-	Id string `xml:"id,attr""`
+	Id string `xml:"id,attr"`
 	Sql string `xml:",chardata"`
 }
 
